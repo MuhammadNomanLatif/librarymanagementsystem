@@ -2,8 +2,6 @@ import User from "../models/user.js";
 
 export const signup = async (req, res) => {
   try {
-    console.log(req.body);
-
     const { name, email, password } = req.body;
 
     // Basic validation
@@ -18,9 +16,9 @@ export const signup = async (req, res) => {
     }
 
     // Create new user
-    const newUser = new User({ name, email, password });
+    const newUser = new User({ name, email });
+    newUser.password = await newUser.encryptPassword(password);
 
-    user.password = await user.encryptPassword(password);
     // Save user to DB
     await newUser.save();
 
@@ -34,20 +32,17 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log(req.body);
   try {
     const { name, email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
-    const user = await User.find({ email });
+    const user = await User.findOne({ email });
+    console.log(user.methods);
     if (!user) {
       return res.status(401).json({ message: "User not registered" });
     }
-    const isPasswordCorrect = await user.comparePassword(
-      password,
-      user.password
-    );
+    const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect) {
       return res.status(401).json({ message: "password is incorrected" });
     }

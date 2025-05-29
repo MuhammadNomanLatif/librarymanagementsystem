@@ -31,7 +31,7 @@ userSchema.methods.encryptPassword = async function (password) {
   return await bcrypt.hash(password, saltRound);
 };
 // 👇 Optional: add method to compare password
-userSchema.methods.comparePassword = async function (plainPassword) {
+userSchema.methods.comparePassword  = async function (plainPassword) {
   return await bcrypt.compare(plainPassword, this.password);
 };
 

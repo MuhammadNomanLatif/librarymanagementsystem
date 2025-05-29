@@ -1,7 +1,8 @@
 import express from "express";
+import authMiddleware from "../middleware/authmiddleware.js"
 import {registerUser,delteUser,getAllregisterUser,getUser,updateUser,updatePartialUerd} from "../controllers/userController.js";
 const router = express.Router();
-router.post("/users", registerUser);
+router.post("/users",authMiddleware, registerUser);
 
 // READ ALL: GET /api/v1/users
 router.get("/users",getAllregisterUser)
