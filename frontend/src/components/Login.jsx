@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../utils/axiosInstance";
 import {
   Box,
   Button,
@@ -7,32 +9,30 @@ import {
   Typography,
   Grid,
   Paper,
-} from '@mui/material';
-import axios from 'axios';
+} from "@mui/material";
 
 const Login = () => {
+  const navigate = useNavigate(); // 👈 get the navigation function
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', formData, {
-        withCredentials: true, // if using httpOnly cookies
-      });
-      setMessage(res.data.message || 'Login successful');
-      // Save token to localStorage if using tokens
-      // localStorage.setItem("token", res.data.token);
+      const res = await api.post("/login", formData);
+      setMessage(res.data.message || "Login successful");
+      // ✅ Redirect to home after successful login
+      navigate("/");
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Login failed');
+      setMessage(err.response?.data?.message || "Login failed");
     }
   };
 

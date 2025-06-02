@@ -10,6 +10,7 @@ import bookRoutes from "./routes/bookRoutes.js";
 const app = express();
 dotenv.config();
 app.use(express.json());
+console.log(process.env.FRONTEND_URL,'frontend URL');
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,

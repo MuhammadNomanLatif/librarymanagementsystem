@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+import api from "../utils/axiosInstance";
 import {
   Box,
   Button,
@@ -7,31 +8,33 @@ import {
   Typography,
   Grid,
   Paper,
-} from '@mui/material';
-import axios from 'axios';
+} from "@mui/material";
+import axios from "axios";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
+    console.log(e);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData);
     e.preventDefault();
 
     try {
       // POST to your backend endpoint
-      const res = await axios.post('http://localhost:5000/api/auth/signup', formData);
-      setMessage(res.data.message || 'Signup successful');
+      const res = await api.post("/signup", formData);
+      setMessage(res.data.message || "Signup successful");
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Signup failed');
+      setMessage(err.response?.data?.message || "Signup failed");
     }
   };
 

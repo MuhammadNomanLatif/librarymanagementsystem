@@ -38,7 +38,6 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
     const user = await User.findOne({ email });
-    console.log(user.methods);
     if (!user) {
       return res.status(401).json({ message: "User not registered" });
     }
@@ -51,7 +50,7 @@ export const login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // only send over HTTPS in prod
+        // secure: process.env.NODE_ENV === "production", // only send over HTTPS in prod
         sameSite: "strict",
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       })
