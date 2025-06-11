@@ -1,4 +1,5 @@
 import express from "express";
+import verifyToken from "../middleware/authmiddleware.js";
 import {
   addBook,
   updateBook,
@@ -8,9 +9,9 @@ import {
 
 const router = express.Router();
 
-router.post("/addbook", addBook); // Add
-router.put("/books/:id", updateBook); // Edit
-router.delete("/books/:id", deleteBook); // Delete
-router.get("/books", getAllBooks); // 👈 GET all books
+router.post("/addbook",verifyToken, addBook); // Add
+router.put("/books/:id",verifyToken, updateBook); // Edit
+router.delete("/books/:id",verifyToken, deleteBook); // Delete
+router.get("/books",verifyToken, getAllBooks); // 👈 GET all books
 
 export default router;

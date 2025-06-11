@@ -68,3 +68,14 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// authController.js
+export const logoutUser = (req, res) => {
+  console.log(res);
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true, // set to true in production with HTTPS
+    sameSite: "strict",
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+};

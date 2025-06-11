@@ -84,6 +84,15 @@ const Login = () => {
             )}
           </Grid>
         </Box>
+        <Grid item xs={12}>
+          <Button
+            onClick={() => navigate("/signup")}
+            variant="outlined"
+            fullWidth
+          >
+            Don't have an account? Sign up
+          </Button>
+        </Grid>
       </Paper>
     </Container>
   );

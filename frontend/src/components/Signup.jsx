@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../utils/axiosInstance";
+import { useNavigate } from "react-router-dom"; // ✅ Import
 import {
   Box,
   Button,
@@ -12,6 +13,7 @@ import {
 import axios from "axios";
 
 const Signup = () => {
+  const navigate = useNavigate(); // ✅ Hook for navigation
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -88,6 +90,16 @@ const Signup = () => {
             <Grid item xs={12}>
               <Button type="submit" variant="contained" fullWidth>
                 Create Account
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                onClick={() => navigate("/login")}
+                type="submit"
+                variant="contained"
+                fullWidth
+              >
+                Already have an account?
               </Button>
             </Grid>
 
