@@ -84,7 +84,7 @@ const Signup = () => {
       setFormData({ name: "", email: "", password: "" });
 
       // Redirect to login after short delay
-      setTimeout(() => navigate("/login"), 1500);
+      setTimeout(() => navigate("/"), 500);
     } catch (err) {
       setMessage(err.response?.data?.message || "Signup failed");
       setMessageColor("error");
@@ -152,7 +152,7 @@ const Signup = () => {
         <Typography sx={{ textAlign: "center", mt: 2 }}>
           Already have an account?{" "}
           <Link
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
             variant="body2"
             sx={{ cursor: "pointer" }}
           >

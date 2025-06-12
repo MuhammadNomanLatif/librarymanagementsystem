@@ -71,11 +71,19 @@ export const login = async (req, res) => {
 
 // authController.js
 export const logoutUser = (req, res) => {
-  console.log(res);
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: true, // set to true in production with HTTPS
-    sameSite: "strict",
-  });
-  res.status(200).json({ message: "Logged out successfully" });
+  try {
+    // Optionally log user info or a message
+    console.log("Logging out user");
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // true only in production
+      sameSite: "strict",
+    });
+    console.log("Logging out user");
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({ message: "Logout failed" });
+  }
 };

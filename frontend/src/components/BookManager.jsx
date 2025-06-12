@@ -1,160 +1,144 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
 import api from "../utils/axiosInstance"; // baseURL should point to /api or /api/v1
+import ButtonAppBar from "./ButtonAppBar";
+const columns = [
+  { id: "name", label: "Name", minWidth: 170 },
+  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
+  {
+    id: "population",
+    label: "Population",
+    minWidth: 170,
+    align: "right",
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "size",
+    label: "Size\u00a0(km\u00b2)",
+    minWidth: 170,
+    align: "right",
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "density",
+    label: "Density",
+    minWidth: 170,
+    align: "right",
+    format: (value) => value.toFixed(2),
+  },
+];
+
+function createData(name, code, population, size) {
+  const density = population / size;
+  return { name, code, population, size, density };
+}
+const rows = [
+  createData("India", "IN", 1324171354, 3287263),
+  createData("China", "CN", 1403500365, 9596961),
+  createData("Italy", "IT", 60483973, 301340),
+  createData("United States", "US", 327167434, 9833520),
+  createData("Canada", "CA", 37602103, 9984670),
+  createData("Australia", "AU", 25475400, 7692024),
+  createData("Germany", "DE", 83019200, 357578),
+  createData("Ireland", "IE", 4857000, 70273),
+  createData("Mexico", "MX", 126577691, 1972550),
+  createData("Japan", "JP", 126317000, 377973),
+  createData("France", "FR", 67022000, 640679),
+  createData("United Kingdom", "GB", 67545757, 242495),
+  createData("Russia", "RU", 146793744, 17098246),
+  createData("Nigeria", "NG", 200962417, 923768),
+  createData("Brazil", "BR", 210147125, 8515767),
+];
 
 const BookManager = () => {
-  const [books, setBooks] = useState([]);
-  const [formData, setFormData] = useState({ title: "", author: "", isbn: "" });
-  const [editingId, setEditingId] = useState(null);
-  const [message, setMessage] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [rows, setRows] = useState([]);
+  // useEffect(() => {
+  //   const fetchBooks = async () => {
+  //     try {
+  //       const res = await api.get("/books"); // or /api/books
+  //       setRows(res.data); // Adjust this based on your backend response
+  //     } catch (err) {
+  //       console.error("Failed to fetch books:", err);
+  //     }
+  //   };
 
-  // Get all books (optional, assuming you have GET /books)
-  const fetchBooks = async () => {
-    try {
-      const res = await api.get("/books"); // You must have a GET endpoint
-      setBooks(res.data.books || res.data); // Adjust as per your backend response
-    } catch (err) {
-      setMessage("Failed to fetch books");
-    }
+  //   fetchBooks();
+  // }, []);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  useEffect(() => {
-    fetchBooks();
-  }, []);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editingId) {
-        const res = await api.put(`/books/${editingId}`, formData);
-        setMessage(res.data.message);
-      } else {
-        const res = await api.post("/books", formData);
-        setMessage(res.data.message);
-      }
-      setFormData({ title: "", author: "", isbn: "" });
-      setEditingId(null);
-      fetchBooks();
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Action failed");
-    }
-  };
-
-  const handleEdit = (book) => {
-    setFormData({ title: book.title, author: book.author, isbn: book.isbn });
-    setEditingId(book._id);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      const res = await api.delete(`/books/${id}`);
-      setMessage(res.data.message);
-      fetchBooks();
-    } catch (err) {
-      setMessage("Delete failed");
-    }
-  };
-
   return (
-    <Container maxWidth="md">
-      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h5" gutterBottom>
-          {editingId ? "Edit Book" : "Add New Book"}
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Author"
-                name="author"
-                value={formData.author}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="ISBN"
-                name="isbn"
-                value={formData.isbn}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button type="submit" variant="contained">
-                {editingId ? "Update Book" : "Add Book"}
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-
-        {message && (
-          <Typography color="primary" gutterBottom>
-            {message}
-          </Typography>
-        )}
-
-        <Typography variant="h6" gutterBottom>
-          Book List
-        </Typography>
-        {books.length === 0 ? (
-          <Typography>No books found</Typography>
-        ) : (
-          books.map((book) => (
-            <Paper key={book._id} sx={{ p: 2, mt: 2 }}>
-              <Typography>
-                <strong>{book.title}</strong> by {book.author} (ISBN:{" "}
-                {book.isbn})
-              </Typography>
-              <Box mt={1}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  sx={{ mr: 1 }}
-                  onClick={() => handleEdit(book)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                  onClick={() => handleDelete(book._id)}
-                >
-                  Delete
-                </Button>
-              </Box>
-            </Paper>
-          ))
-        )}
+    <>
+      <ButtonAppBar />
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.code}
+                    >
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
-    </Container>
+    </>
   );
 };
 

@@ -31,7 +31,7 @@ userSchema.methods.encryptPassword = async function (password) {
   return await bcrypt.hash(password, saltRound);
 };
 // 👇 Optional: add method to compare password
-userSchema.methods.comparePassword  = async function (plainPassword) {
+userSchema.methods.comparePassword = async function (plainPassword) {
   return await bcrypt.compare(plainPassword, this.password);
 };
 
@@ -41,7 +41,7 @@ userSchema.methods.accessToken = async function () {
   const token = jwt.sign(
     { id: this._id, email: this.email },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
+    { expiresIn: process.env.JWT_EXPIRES_IN || "5m" }
   );
   return token;
 };

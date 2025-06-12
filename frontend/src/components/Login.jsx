@@ -66,7 +66,7 @@ const Login = () => {
       const res = await api.post("/login", formData);
       setMessage(res.data.message || "Login successful");
       // ✅ Redirect to home after successful login
-      navigate("/");
+      navigate("home");
     } catch (err) {
       setMessage(err.response?.data?.message || "Login failed");
     }
