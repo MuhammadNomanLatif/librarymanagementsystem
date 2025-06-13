@@ -46,7 +46,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "password is incorrected" });
     }
 
-    const token = await user.accessToken();
+    const token = await user.accessToken(user);
     res
       .cookie("token", token, {
         httpOnly: true,
@@ -61,6 +61,7 @@ export const login = async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
+          role: user.role,
         },
       });
   } catch (error) {

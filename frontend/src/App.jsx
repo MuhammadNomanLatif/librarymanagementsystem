@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import BookManager from "./components/BookManager";
+import BookCard from "./components/BookCard";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
 
         {/* Other routes */}
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<BookManager />} />
+        <Route path="/admin/dashboard" element={<BookManager />} />
+        <Route path="/user/dashboard" element={<BookCard />} />
       </Routes>
     </Router>
   );

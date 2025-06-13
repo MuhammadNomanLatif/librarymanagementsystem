@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
   {
     timestamps: true, // adds createdAt and updatedAt
@@ -37,9 +42,9 @@ userSchema.methods.comparePassword = async function (plainPassword) {
 
 // sign jwt token
 
-userSchema.methods.accessToken = async function () {
+userSchema.methods.accessToken = async function (user) {
   const token = jwt.sign(
-    { id: this._id, email: this.email },
+    { userId: user._id, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || "5m" }
   );

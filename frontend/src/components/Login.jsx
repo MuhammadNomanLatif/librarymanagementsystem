@@ -64,9 +64,13 @@ const Login = () => {
     if (!validateInputs()) return;
     try {
       const res = await api.post("/login", formData);
+      const { user } = res.data;
       setMessage(res.data.message || "Login successful");
-      // ✅ Redirect to home after successful login
-      navigate("home");
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
     } catch (err) {
       setMessage(err.response?.data?.message || "Login failed");
     }
