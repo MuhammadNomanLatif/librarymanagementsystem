@@ -3,9 +3,9 @@ import Book from "../models/book.js";
 // Create Book
 export const addBook = async (req, res) => {
   try {
-    const { title, author, isbn } = req.body;
+    const { title, author, isbn, available } = req.body;
     console.log(req.body);
-    const book = new Book({ title, author, isbn });
+    const book = new Book({ title, author, isbn, available });
     await book.save();
     res.status(201).json({ message: "Book added", book });
   } catch (err) {
@@ -46,7 +46,8 @@ export const getAllBooks = async (req, res) => {
     const books = await Book.find(); // You can add filters/sorting if needed
     res.json({ books }); // or just res.json(books) if frontend expects raw array
   } catch (err) {
-    res.status(500).json({ message: "Error fetching books", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching books", error: err.message });
   }
 };
-

@@ -60,19 +60,21 @@ const rows = [
 const BookManager = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // const [rows, setRows] = useState([]);
-  // useEffect(() => {
-  //   const fetchBooks = async () => {
-  //     try {
-  //       const res = await api.get("/books"); // or /api/books
-  //       setRows(res.data); // Adjust this based on your backend response
-  //     } catch (err) {
-  //       console.error("Failed to fetch books:", err);
-  //     }
-  //   };
+  const [rowss, setRowss] = useState([]);
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await api.get("/books"); // or /api/books
+        console.log(res);
+        setRowss(res.data); // Adjust this based on your backend response
+      } catch (err) {
+        console.error("Failed to fetch books:", err);
+      }
+    };
 
-  //   fetchBooks();
-  // }, []);
+    fetchBooks();
+    console.log(rowss);
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

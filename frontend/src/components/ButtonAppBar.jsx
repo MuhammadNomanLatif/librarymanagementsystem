@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import AddBook from "./booksCrud/AddBook";
 import api from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 export default function ButtonAppBar() {
@@ -18,7 +19,12 @@ export default function ButtonAppBar() {
       console.error(error);
     }
   };
-
+  const goToAddBook = () => {
+    navigate("/AddBook");
+  };
+  const goToEditBook = () => {
+    navigate(`/editbook/${id}`);
+  };
   return (
     <Box className="headerSetting" sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -37,6 +43,12 @@ export default function ButtonAppBar() {
           </Typography>
           <Button onClick={handleLogout} color="inherit">
             LogOut
+          </Button>
+          <Button onClick={goToAddBook} color="inherit">
+            Add Book
+          </Button>
+          <Button onClick={goToEditBook} color="inherit">
+            Edit Book
           </Button>
         </Toolbar>
       </AppBar>
