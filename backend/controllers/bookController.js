@@ -4,7 +4,6 @@ import Book from "../models/book.js";
 export const addBook = async (req, res) => {
   try {
     const { title, author, isbn, available } = req.body;
-    console.log(req.body);
     const book = new Book({ title, author, isbn, available });
     await book.save();
     res.status(201).json({ message: "Book added", book });

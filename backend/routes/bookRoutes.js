@@ -7,12 +7,12 @@ import {
   deleteBook,
   getAllBooks,
 } from "../controllers/bookController.js";
-
+import { validateBook } from "../middleware/validateBook.js";
 const router = express.Router();
 
-router.post("/addbook", verifyToken, checkRole("admin"), addBook); // Add
-router.put("/books/:id", verifyToken, checkRole("admin"), updateBook); // Edit
-router.delete("/books/:id", verifyToken, checkRole("admin"), deleteBook); // Delete
-router.get("/books", verifyToken, checkRole("admin"), getAllBooks); // 👈 GET all books
+router.post("/addbook", verifyToken, checkRole("admin"), validateBook, addBook); // Add
+router.put("/books/:id", verifyToken, checkRole("admin"),validateBook, updateBook); // Edit
+router.delete("/books/:id", verifyToken, checkRole("admin"),validateBook, deleteBook); // Delete
+router.get("/books", verifyToken, checkRole("admin"),validateBook, getAllBooks); // 👈 GET all books
 
 export default router;
