@@ -28,7 +28,6 @@ const BookManager = () => {
     const fetchBooks = async () => {
       try {
         const res = await api.get("/books"); // or /api/books
-        console.log(res);
         setBooks(res.data.books); // Adjust this based on your backend response
       } catch (err) {
         console.error("Failed to fetch books:", err);
@@ -49,11 +48,9 @@ const BookManager = () => {
       await api.delete(`/deletebook/${selectedBookId}`); // or your actual endpoint
       setOpenDialog(false);
       setSelectedBookId(null);
-
-      // Optionally: refresh the book list
-      // fetchBooks(); // or remove from state if managing locally
+      setBooks((prevBooks) => prevBooks.filter((book) => book._id !== selectedBookId));
     } catch (error) {
-      console.error("Error deleting book:", error);
+      console.error("Error deleting book:", error.response?.data || error.message);
       // Optionally show error toast/snackbar
     }
   };
