@@ -29,9 +29,7 @@ const EditBook = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        console.log("called", id);
         const res = await api.get(`/getBookById/${id}`);
-        console.log("called", res);
         setFormData(res.data.book);
         setLoading(false);
       } catch (err) {
@@ -53,11 +51,9 @@ const EditBook = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/books/${id}`, formData, {
-        withCredentials: true,
-      });
+      await api.put(`/book/${id}`, formData);
       alert("Book updated successfully!");
-      navigate("/admin/books"); // or wherever you list books
+      navigate("/admin/dashboard"); // or wherever you list books
     } catch (err) {
       console.error(err);
       alert("Failed to update book");
