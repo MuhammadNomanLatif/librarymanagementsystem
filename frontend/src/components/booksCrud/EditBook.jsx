@@ -29,9 +29,9 @@ const EditBook = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await api.get(`/addBook/${id}`, {
-          withCredentials: true,
-        });
+        console.log("called", id);
+        const res = await api.get(`/getBookById/${id}`);
+        console.log("called", res);
         setFormData(res.data.book);
         setLoading(false);
       } catch (err) {

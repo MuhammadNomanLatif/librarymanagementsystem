@@ -1,145 +1,141 @@
 import { useEffect, useState } from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  Typography,
+  Paper,
+  TableContainer,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 import api from "../utils/axiosInstance"; // baseURL should point to /api or /api/v1
 import ButtonAppBar from "./ButtonAppBar";
-const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toFixed(2),
-  },
-];
-
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126317000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 17098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
-];
 
 const BookManager = () => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [rowss, setRowss] = useState([]);
+  const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState(null);
+  const [books, setBooks] = useState([]);
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const res = await api.get("/books"); // or /api/books
         console.log(res);
-        setRowss(res.data); // Adjust this based on your backend response
+        setBooks(res.data.books); // Adjust this based on your backend response
       } catch (err) {
         console.error("Failed to fetch books:", err);
       }
     };
 
     fetchBooks();
-    console.log(rowss);
   }, []);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const goToEditBook = (id) => {
+    navigate(`/editbook/${id}`);
   };
+  const handleDeleteClick = (id) => {
+    setSelectedBookId(id);
+    setOpenDialog(true);
+  };
+  const handleConfirmDelete = async () => {
+    try {
+      await api.delete(`/deletebook/${selectedBookId}`); // or your actual endpoint
+      setOpenDialog(false);
+      setSelectedBookId(null);
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
+      // Optionally: refresh the book list
+      // fetchBooks(); // or remove from state if managing locally
+    } catch (error) {
+      console.error("Error deleting book:", error);
+      // Optionally show error toast/snackbar
+    }
+  };
+  const handleCancel = () => {
+    setOpenDialog(false);
+    setSelectedBookId(null);
   };
   return (
     <>
       <ButtonAppBar />
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
+      <TableContainer
+        component={Paper}
+        sx={{
+          mt: 3,
+          maxHeight: 500,
+          overflow: "auto",
+        }}
+      >
+        <Typography variant="h4" sx={{ p: 2, textAlign: "center" }}>
+          Book List
+        </Typography>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">
+                <strong>Title</strong>
+              </TableCell>
+              <TableCell align="center">
+                <strong>Author</strong>
+              </TableCell>
+              <TableCell align="center">
+                <strong>ISBN</strong>
+              </TableCell>
+              <TableCell align="center">
+                <strong>Actions</strong>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {books.map((book) => (
+              <TableRow key={book._id} hover>
+                <TableCell align="center">{book.title}</TableCell>
+                <TableCell align="center">{book.author}</TableCell>
+                <TableCell align="center">{book.isbn}</TableCell>
+                <TableCell align="center">
+                  <Button
+                    onClick={() => goToEditBook(book._id)}
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    sx={{ mr: 1 }}
                   >
-                    {column.label}
-                  </TableCell>
-                ))}
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteClick(book._id)}
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.code}
-                    >
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={openDialog} onClose={handleCancel}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete this book?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

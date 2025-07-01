@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const verifyToken = async (req, res, next) => {
   const token = req.cookies.token;
-  console.log(token);
+  console.log(token, "editbook");
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }

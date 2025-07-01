@@ -11,6 +11,23 @@ export const addBook = async (req, res) => {
     res.status(500).json({ message: "Error adding book", error: err.message });
   }
 };
+export const getBookById = async (req, res) => {
+  console.log('called in controller')
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    res.status(200).json({ book });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving book", error: err.message });
+  }
+};
 
 // Update Book
 export const updateBook = async (req, res) => {

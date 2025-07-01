@@ -22,9 +22,7 @@ export default function ButtonAppBar() {
   const goToAddBook = () => {
     navigate("/AddBook");
   };
-  const goToEditBook = () => {
-    navigate(`/editbook/${id}`);
-  };
+
   return (
     <Box className="headerSetting" sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -47,9 +45,7 @@ export default function ButtonAppBar() {
           <Button onClick={goToAddBook} color="inherit">
             Add Book
           </Button>
-          <Button onClick={goToEditBook} color="inherit">
-            Edit Book
-          </Button>
+        
         </Toolbar>
       </AppBar>
     </Box>
