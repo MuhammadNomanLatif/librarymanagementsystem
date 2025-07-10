@@ -6,12 +6,13 @@ import BookCard from "./components/BookCard";
 import AddBook from "./components/booksCrud/AddBook";
 import EditBook from "./components/booksCrud/EditBook";
 import ProtectRoutes from "./components/ProtactedRoute";
+import AdminLoginPage from "./Pages/adminLogin/AdminLoginPage";
 function App() {
   return (
     <Router>
       <Routes>
         {/* Default route is login */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<AdminLoginPage/>} />
 
         {/* Other routes */}
         <Route path="/signup" element={<Signup />} />
