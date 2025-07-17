@@ -39,6 +39,10 @@ import {
   Brightness4,
   Brightness7,
 } from "@mui/icons-material";
+import CardSample from "../../components/CardSample";
+import BookSearchTable from "../../components/BookSearchTable";
+import BookInformationForm from "../../New Components used for later/BookInformationForm";
+import { da } from "date-fns/locale";
 const menuItems = [
   { text: "Dashboard", icon: <GridViewOutlinedIcon /> },
   { text: "Resources", icon: <SpaceDashboardOutlinedIcon /> },
@@ -132,7 +136,7 @@ const AdminDashboard = () => {
           sx={{
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
-            backgroundColor: mode === "dark" ? "#121212" : "#fff",
+            backgroundColor: mode === "dark" ? "#1b2536" : "#fff",
             color: mode === "dark" ? "#fff" : "#000",
             boxShadow: "none",
           }}
@@ -217,10 +221,11 @@ const AdminDashboard = () => {
             flexGrow: 1,
             p: 3,
             width: { sm: `calc(100% - ${drawerWidth}px)` },
+            marginTop: "45px",
+            backgroundColor: mode === "dark" ? "#121212" : "#f4f8fb",
+            borderTopLeftRadius: "25px",
           }}
         >
-          <Toolbar />
-
           <Grid
             container
             sx={{
@@ -250,6 +255,19 @@ const AdminDashboard = () => {
                 Add New Book
               </Button>
             </Grid>
+          </Grid>
+          <Grid
+            sx={{
+              backgroundColor: mode === "dark" ? "#1b2536" : "#feffff",
+              height: "200px",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              gap: "50px",
+            }}
+          >
+            <CardSample />
           </Grid>
         </Box>
       </Box>
