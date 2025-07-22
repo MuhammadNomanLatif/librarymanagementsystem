@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/axiosInstance";
+import toast from "react-hot-toast";
 import {
   Button,
   Container,
@@ -24,8 +25,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [message, setMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(""); 
   const [messageColor, setMessageColor] = useState("error");
 
   const handleChange = (e) => {
@@ -65,14 +65,17 @@ const Login = () => {
     try {
       const res = await api.post("/login", formData);
       const { user } = res.data;
-      setMessage(res.data.message || "Login successful");
+      toast.success(res.data.message || "Login successful!");
+      toast.success("Login successful!");
       if (user.role === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/user/dashboard");
       }
     } catch (err) {
-      setMessage(err.response?.data?.message || "Login failed");
+      const errorMsg = err.response?.data?.message || "Login failed";
+
+      toast.error(errorMsg);
     }
   };
 

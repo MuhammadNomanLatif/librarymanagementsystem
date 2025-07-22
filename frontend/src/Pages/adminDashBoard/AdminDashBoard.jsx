@@ -43,6 +43,10 @@ import CardSample from "../../components/CardSample";
 import BookSearchTable from "../../components/BookSearchTable";
 import BookInformationForm from "../../New Components used for later/BookInformationForm";
 import { da } from "date-fns/locale";
+import BookLendingForm from "../../New Components used for later/BookLendingForm";
+import VisitorsChart from "../../New Components used for later/VisitorsChart";
+import BooksAllocationChart from "../../New Components used for later/BooksAllocationChart";
+import BookAvailabilityChart from "../../New Components used for later/BookAvailabilityChart";
 const menuItems = [
   { text: "Dashboard", icon: <GridViewOutlinedIcon /> },
   { text: "Resources", icon: <SpaceDashboardOutlinedIcon /> },
@@ -60,7 +64,7 @@ const AdminDashboard = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [nestedOpen, setNestedOpen] = useState(false);
   const [mode, setMode] = useState("light");
-
+  const [showAddBookForm, setShowAddBookForm] = useState(false);
   const theme = createTheme({
     palette: {
       mode,
@@ -136,7 +140,7 @@ const AdminDashboard = () => {
           sx={{
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
-            backgroundColor: mode === "dark" ? "#1b2536" : "#fff",
+            backgroundColor: mode === "dark" ? "#121212"  : "#fff",
             color: mode === "dark" ? "#fff" : "#000",
             boxShadow: "none",
           }}
@@ -224,6 +228,7 @@ const AdminDashboard = () => {
             marginTop: "45px",
             backgroundColor: mode === "dark" ? "#121212" : "#f4f8fb",
             borderTopLeftRadius: "25px",
+            height: "100vh",
           }}
         >
           <Grid
@@ -246,6 +251,7 @@ const AdminDashboard = () => {
                 Quick Actions:
               </Typography>
               <Button
+                onClick={() => setShowAddBookForm(true)}
                 variant="contained"
                 sx={{
                   backgroundColor: "#673fc6",
@@ -256,19 +262,11 @@ const AdminDashboard = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid
-            sx={{
-              backgroundColor: mode === "dark" ? "#1b2536" : "#feffff",
-              height: "200px",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              gap: "50px",
-            }}
-          >
-            <CardSample />
-          </Grid>
+
+          <CardSample />
+          <VisitorsChart />
+          <BooksAllocationChart />
+          <BookAvailabilityChart />
         </Box>
       </Box>
     </ThemeProvider>

@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Box,
   Grid,
@@ -15,18 +14,76 @@ import LockIcon from "@mui/icons-material/Lock";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import EmailIcon from "@mui/icons-material/Email";
+import api from "../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 const AdminLoginPage = () => {
   const is1920x1080 = useMediaQuery(
     "(min-width:1920px) and (max-width:1920px) and (min-height:1080px) and (max-height:1080px)"
   );
-  const [showPassword, setShowPassword] = React.useState(false);
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const validateInputs = () => {
+    let valid = true;
 
+    // Email validation
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+      setEmailError(true);
+      setEmailErrorMessage("Please enter a valid email address.");
+      valid = false;
+    } else {
+      setEmailError(false);
+      setEmailErrorMessage("");
+    }
+
+    // Password validation
+    if (!formData.password || formData.password.length < 6) {
+      setPasswordError(true);
+      setPasswordErrorMessage("Password must be at least 6 characters.");
+      valid = false;
+    } else {
+      setPasswordError(false);
+      setPasswordErrorMessage("");
+    }
+
+    return valid;
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateInputs()) return;
+    try {
+      const res = await api.post("/login", formData);
+      const { user } = res.data;
+      setMessage(res.data.message || "Login successful");
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Login failed");
+    }
+  };
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
   };
   return (
     <>
-      <Box  sx={{ width: "100%", height: "100vh" }}>
+      <Box sx={{ width: "100%", height: "100vh" }}>
         <Grid container sx={{ height: "100%" }}>
           {/* Left Side */}
           <Grid
@@ -229,53 +286,70 @@ const AdminLoginPage = () => {
               >
                 admin login
               </Typography>
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type="email"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <TextField
-                label="Password"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type={showPassword ? "text" : "password"}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePassword} edge="end">
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{
-                  mt: 2,
-                  fontFamily: "Inter, sans-serif",
-                  backgroundColor: "#635BFF",
-                }}
-              >
-                Login
-              </Button>
+              <form onSubmit={handleSubmit} noValidate>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  error={emailError}
+                  placeholder="your@email.com"
+                  helperText={emailErrorMessage}
+                  onChange={handleChange}
+                  required
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={passwordError}
+                  helperText={passwordErrorMessage}
+                  required
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePassword} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{
+                    mt: 2,
+                    fontFamily: "Inter, sans-serif",
+                    backgroundColor: "#635BFF",
+                  }}
+                  type="submit"
+                >
+                  Login
+                </Button>
+              </form>
             </Box>
           </Grid>
         </Grid>
