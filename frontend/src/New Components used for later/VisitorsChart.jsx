@@ -57,16 +57,17 @@ const VisitorsChart = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 3, height: "100%", marginTop: 2 }}>
+    <Paper elevation={3} sx={{ width:"60%", marginTop: 2,borderRadius: 2, boxShadow: 3 }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           mb: 3,
-        }}
+          padding:2,
+          }}
       >
-        <Typography variant="h6" fontWeight="bold">
+        <Typography variant="h6" fontWeight="bold"        >
           No of Visitors
         </Typography>
 
@@ -80,7 +81,7 @@ const VisitorsChart = () => {
         </FormControl>
       </Box>
 
-      <Box sx={{ height: isMobile ? 300 : 400 }}>
+      <Box sx={{ height: isMobile ? 300 : 250 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}

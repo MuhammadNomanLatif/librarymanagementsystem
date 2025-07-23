@@ -6,6 +6,8 @@ import {
   Box,
   MenuItem,
   Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import {
   PieChart,
@@ -28,21 +30,25 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF5A5F", "#A569BD"];
 const BookAvailabilityChart = () => {
   const [year, setYear] = React.useState("2024");
   return (
-    <Card sx={{ borderRadius: 4, boxShadow: 3, marginTop: 2 }}>
+    <Card sx={{ borderRadius: 2, boxShadow: 3, marginTop: 2 }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="subtitle1" fontWeight={600}>
             Books Allocation by Locations
           </Typography>
-          <Select
-            size="small"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            sx={{ fontSize: 14 }}
-          >
-            <MenuItem value="2024">2024</MenuItem>
-            <MenuItem value="2023">2023</MenuItem>
-          </Select>
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel>Year</InputLabel>
+            <Select
+              sx={{ fontSize: 14 }}
+              value={year}
+              label="Year"
+              onChange={(e) => setYear(e.target.value)}
+            >
+              <MenuItem value="2024">2024</MenuItem>
+              <MenuItem value="2023">2023</MenuItem>
+              <MenuItem value="2022">2022</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
 
         <Box height={250}>

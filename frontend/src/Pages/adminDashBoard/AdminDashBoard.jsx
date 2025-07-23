@@ -140,7 +140,7 @@ const AdminDashboard = () => {
           sx={{
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
-            backgroundColor: mode === "dark" ? "#121212"  : "#fff",
+            backgroundColor: mode === "dark" ? "#121212" : "#fff",
             color: mode === "dark" ? "#fff" : "#000",
             boxShadow: "none",
           }}
@@ -264,9 +264,14 @@ const AdminDashboard = () => {
           </Grid>
 
           <CardSample />
-          <VisitorsChart />
-          <BooksAllocationChart />
-          <BookAvailabilityChart />
+          <Grid sx={{ display: "flex", justifyContent: "space-between" }}>
+            <VisitorsChart />
+            <BooksAllocationChart />
+          </Grid>
+          <Grid sx={{ display: "flex", justifyContent: "space-between" }}>
+            <BookAvailabilityChart />
+            <VisitorsChart />
+          </Grid>
         </Box>
       </Box>
     </ThemeProvider>
