@@ -262,16 +262,21 @@ const AdminDashboard = () => {
               </Button>
             </Grid>
           </Grid>
-
-          <CardSample />
-          <Grid sx={{ display: "flex", justifyContent: "space-between" }}>
-            <VisitorsChart />
-            <BooksAllocationChart />
-          </Grid>
-          <Grid sx={{ display: "flex", justifyContent: "space-between" }}>
-            <BookAvailabilityChart />
-            <VisitorsChart />
-          </Grid>
+          {showAddBookForm ? (
+            <Grid>
+              <CardSample />
+              <Grid sx={{ display: "flex", justifyContent: "space-between" }}>
+                <VisitorsChart />
+                <BooksAllocationChart />
+              </Grid>
+              <Grid sx={{ display: "flex", justifyContent: "space-between" }}>
+                <BookAvailabilityChart />
+                <VisitorsChart />
+              </Grid>
+            </Grid>
+          ) : (
+            <BookInformationForm />
+          )}
         </Box>
       </Box>
     </ThemeProvider>
