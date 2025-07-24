@@ -7,12 +7,11 @@ import {
   RadioGroup,
   Radio,
   Button,
-  Divider,
   Grid,
   Paper,
 } from "@mui/material";
 
-const BookInformationForm = () => {
+const BookInformationForm = ({ onCancel }) => {
   const [formData, setFormData] = useState({
     bookTitle: "",
     genre: "",
@@ -32,7 +31,9 @@ const BookInformationForm = () => {
     createdDate: new Date(),
     publishedDate: new Date(1950, 9, 29),
   });
-
+  const handleCancelButton = () => {
+    onCancel(false);
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -259,6 +260,7 @@ const BookInformationForm = () => {
             color: "#673fc6",
             "&:hover": { backgroundColor: "#fefef9ff" },
           }}
+          onClick={handleCancelButton}
         >
           Cancel
         </Button>

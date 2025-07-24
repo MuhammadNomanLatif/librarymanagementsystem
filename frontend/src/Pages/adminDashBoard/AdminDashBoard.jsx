@@ -34,16 +34,11 @@ import {
   Menu as MenuIcon,
   Inbox as InboxIcon,
   Mail as MailIcon,
-  ExpandLess,
-  ExpandMore,
   Brightness4,
   Brightness7,
 } from "@mui/icons-material";
 import CardSample from "../../components/CardSample";
-import BookSearchTable from "../../components/BookSearchTable";
 import BookInformationForm from "../../New Components used for later/BookInformationForm";
-import { da } from "date-fns/locale";
-import BookLendingForm from "../../New Components used for later/BookLendingForm";
 import VisitorsChart from "../../New Components used for later/VisitorsChart";
 import BooksAllocationChart from "../../New Components used for later/BooksAllocationChart";
 import BookAvailabilityChart from "../../New Components used for later/BookAvailabilityChart";
@@ -262,7 +257,7 @@ const AdminDashboard = () => {
               </Button>
             </Grid>
           </Grid>
-          {showAddBookForm ? (
+          {showAddBookForm === false ? (
             <Grid>
               <CardSample />
               <Grid sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -275,7 +270,7 @@ const AdminDashboard = () => {
               </Grid>
             </Grid>
           ) : (
-            <BookInformationForm />
+            <BookInformationForm onCancel={setShowAddBookForm} />
           )}
         </Box>
       </Box>
