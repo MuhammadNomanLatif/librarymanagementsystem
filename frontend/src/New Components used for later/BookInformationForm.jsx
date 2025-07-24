@@ -11,7 +11,8 @@ import {
   Paper,
   FormHelperText,
 } from "@mui/material";
-
+import api from "../utils/axiosInstance";
+import toast from "react-hot-toast";
 const BookInformationForm = ({ onCancel, onSubmit }) => {
   const [formData, setFormData] = useState({
     bookTitle: "",
@@ -92,10 +93,20 @@ const BookInformationForm = ({ onCancel, onSubmit }) => {
     onCancel(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      onSubmit(formData);
+      try {
+        console.log(formData);
+        const res = await api.post("/addbook", formData, {
+          withCredentials: true,
+        });
+        toast.success("Book added successfully!");
+        console.log(res.data);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to add book. Please try again.");
+      }
     }
   };
 
