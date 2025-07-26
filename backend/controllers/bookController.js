@@ -2,9 +2,42 @@ import Book from "../models/book.js";
 
 // Create Book
 export const addBook = async (req, res) => {
+  console.log(req.body);
   try {
-    const { title, author, isbn, available } = req.body;
-    const book = new Book({ title, author, isbn, available });
+    const {
+      bookTitle,
+      authors,
+      isbn,
+      category,
+      language,
+      availableCopies,
+      totalCopies,
+      floor,
+      shelfLocation,
+      totalPages,
+      status,
+      volume,
+      bookFeatures,
+      publishedYear,
+      moral,
+    } = req.body;
+    const book = new Book({
+      bookTitle,
+      authors,
+      isbn,
+      category,
+      language,
+      availableCopies,
+      totalCopies,
+      floor,
+      shelfLocation,
+      totalPages,
+      status,
+      volume,
+      bookFeatures,
+      publishedYear,
+      moral,
+    });
     await book.save();
     res.status(201).json({ message: "Book added", book });
   } catch (err) {
@@ -12,7 +45,7 @@ export const addBook = async (req, res) => {
   }
 };
 export const getBookById = async (req, res) => {
-  console.log('called in controller')
+  console.log("called in controller");
   try {
     const { id } = req.params;
     console.log(id);

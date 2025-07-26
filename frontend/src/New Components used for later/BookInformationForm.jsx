@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import api from "../utils/axiosInstance";
 import toast from "react-hot-toast";
-const BookInformationForm = ({ onCancel, onSubmit }) => {
+const BookInformationForm = ({ onCancel }) => {
   const [formData, setFormData] = useState({
     bookTitle: "",
     authors: "",
@@ -97,14 +97,12 @@ const BookInformationForm = ({ onCancel, onSubmit }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        console.log(formData);
         const res = await api.post("/addbook", formData, {
           withCredentials: true,
         });
+
         toast.success("Book added successfully!");
-        console.log(res.data);
       } catch (err) {
-        console.error(err);
         toast.error("Failed to add book. Please try again.");
       }
     }
