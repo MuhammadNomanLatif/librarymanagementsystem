@@ -102,6 +102,7 @@ const BookInformationForm = ({ onCancel }) => {
         });
 
         toast.success("Book added successfully!");
+        navigate("/admindashboard");
       } catch (err) {
         toast.error("Failed to add book. Please try again.");
       }

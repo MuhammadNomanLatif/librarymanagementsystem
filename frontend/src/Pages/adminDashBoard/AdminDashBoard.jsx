@@ -42,20 +42,63 @@ import BookInformationForm from "../../New Components used for later/BookInforma
 import VisitorsChart from "../../New Components used for later/VisitorsChart";
 import BooksAllocationChart from "../../New Components used for later/BooksAllocationChart";
 import BookAvailabilityChart from "../../New Components used for later/BookAvailabilityChart";
-const menuItems = [
-  { text: "Dashboard", icon: <GridViewOutlinedIcon /> },
-  { text: "Resources", icon: <SpaceDashboardOutlinedIcon /> },
-  { text: "Manage Books", icon: <ManageHistoryOutlinedIcon /> },
-  { text: "Reports", icon: <AssessmentOutlinedIcon /> },
-  { text: "Landed Books", icon: <AddToPhotosOutlinedIcon /> },
-  { text: "Members", icon: <CardMembershipOutlinedIcon /> },
-  { text: "Setting", icon: <SettingsOutlinedIcon /> },
-  { text: "Notifications", icon: <NotificationsOutlinedIcon /> },
-  { text: "Logout", icon: <ExitToAppOutlinedIcon /> },
-];
+import { useNavigate } from "react-router-dom";
+import api from "../../utils/axiosInstance";
+import toast from "react-hot-toast";
+
 const drawerWidth = 200;
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+  const menuItems = [
+    {
+      text: "Dashboard",
+      icon: <GridViewOutlinedIcon />,
+      action: () => navigate("/admin/dashboard"),
+    },
+    {
+      text: "Resources",
+      icon: <SpaceDashboardOutlinedIcon />,
+      action: () => navigate("/resources"),
+    },
+    {
+      text: "Manage Books",
+      icon: <ManageHistoryOutlinedIcon />,
+      action: () => navigate("/manage-books"),
+    },
+    {
+      text: "Reports",
+      icon: <AssessmentOutlinedIcon />,
+      action: () => navigate("/reports"),
+    },
+    {
+      text: "Landed Books",
+      icon: <AddToPhotosOutlinedIcon />,
+      action: () => navigate("/landed-books"),
+    },
+    {
+      text: "Members",
+      icon: <CardMembershipOutlinedIcon />,
+      action: () => navigate("/members"),
+    },
+    {
+      text: "Setting",
+      icon: <SettingsOutlinedIcon />,
+      action: () => navigate("/settings"),
+    },
+    {
+      text: "Notifications",
+      icon: <NotificationsOutlinedIcon />,
+      action: () => navigate("/notifications"),
+    },
+    {
+      text: "Logout",
+      icon: <ExitToAppOutlinedIcon />,
+      action: () => {
+        handleLogout();
+      },
+    },
+  ];
   const [mobileOpen, setMobileOpen] = useState(false);
   const [nestedOpen, setNestedOpen] = useState(false);
   const [mode, setMode] = useState("light");
@@ -69,7 +112,16 @@ const AdminDashboard = () => {
   const toggleDrawer = () => {
     setMobileOpen(!mobileOpen);
   };
+  const handleLogout = async () => {
+    try {
+      await api.post("/logout");
 
+      navigate("/");
+      toast.success("Logged out successfully");
+    } catch (error) {
+      toast.error("Failed to log out");
+    }
+  };
   const handleNestedClick = () => {
     setNestedOpen(!nestedOpen);
   };
@@ -106,7 +158,7 @@ const AdminDashboard = () => {
       <List sx={{ marginTop: "-60px", padding: "0px" }}>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={item.action}>
               <ListItemIcon sx={{ marginRight: "-20px" }}>
                 {item.icon}
               </ListItemIcon>
@@ -171,7 +223,7 @@ const AdminDashboard = () => {
             </Tooltip>
             <Tooltip title="Logout" arrow>
               {/* Logout */}
-              <IconButton color="inherit">
+              <IconButton onClick={handleLogout} color="inherit">
                 <ExitToAppOutlinedIcon />
               </IconButton>
             </Tooltip>
