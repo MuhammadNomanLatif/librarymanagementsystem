@@ -22,9 +22,9 @@ function App() {
           <Route element={<ProtectRoutes />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/user/dashboard" element={<BookCard />} />
-            <Route path="/addbook" element={<AddBook />} />
+            <Route path="/admin/add-book" element={<AdminDashboard />} />
             <Route path="/editbook/:id" element={<EditBook />} />
-            <Route path="/manage-books" element={<BookSearchTable />} />
+            <Route path="/admin/manage-books" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </Router>

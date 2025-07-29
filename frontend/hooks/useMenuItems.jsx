@@ -29,7 +29,7 @@ export const useMenuItems = (handleLogout) => {
     {
       text: "Manage Books",
       icon: <ManageHistoryOutlined />,
-      action: () => navigate("/manage-books"),
+      action: () => navigate("/admin/manage-books"),
     },
     {
       text: "Reports",

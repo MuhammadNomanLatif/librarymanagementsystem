@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography, Button } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 const MainContent = ({
   drawerWidth,
   mode,
@@ -8,6 +8,7 @@ const MainContent = ({
   onShowAddBookForm,
   children,
 }) => {
+  const navigate = useNavigate();
   return (
     <Box
       component="main"
@@ -41,7 +42,7 @@ const MainContent = ({
             Quick Actions:
           </Typography>
           <Button
-            onClick={() => onShowAddBookForm(true)}
+            onClick={() => navigate("/admin/add-book")}
             variant="contained"
             sx={{
               backgroundColor: "#673fc6",

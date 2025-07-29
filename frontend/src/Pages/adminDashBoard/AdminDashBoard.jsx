@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../../utils/axiosInstance";
 
@@ -10,6 +10,7 @@ import AdminDrawer from "../../components/layout/AdminDrawer";
 import MainContent from "../../components/layout/MainContent";
 import DashboardContent from "../../components/layout/DashboardContent";
 import BookInformationForm from "../../New Components used for later/BookInformationForm";
+import BookSearchTable from "../../components/BookSearchTable";
 
 // Hooks
 import { useMenuItems } from "../../../hooks/useMenuItems";
@@ -19,6 +20,7 @@ const drawerWidth = 200;
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showAddBookForm, setShowAddBookForm] = useState(false);
 
@@ -39,6 +41,22 @@ const AdminDashboard = () => {
 
   const toggleDrawer = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  // Function to render content based on current path
+  const renderContent = () => {
+    console.log("Current Path:", location.pathname);
+    switch (location.pathname) {
+      case "/admin/manage-books":
+        return <BookSearchTable />;
+      case "/admin/add-book":
+        return (
+          <BookInformationForm onCancel={() => navigate("/admin/dashboard")} />
+        );
+      case "/admin/dashboard":
+      default:
+        return <DashboardContent />;
+    }
   };
 
   return (
@@ -76,11 +94,7 @@ const AdminDashboard = () => {
           showAddBookForm={showAddBookForm}
           onShowAddBookForm={setShowAddBookForm}
         >
-          {showAddBookForm ? (
-            <BookInformationForm onCancel={setShowAddBookForm} />
-          ) : (
-            <DashboardContent />
-          )}
+          {renderContent()}
         </MainContent>
       </Box>
     </ThemeProvider>
