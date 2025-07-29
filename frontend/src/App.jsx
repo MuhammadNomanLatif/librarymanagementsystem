@@ -6,7 +6,7 @@ import AddBook from "./components/booksCrud/AddBook";
 import EditBook from "./components/booksCrud/EditBook";
 import ProtectRoutes from "./components/ProtactedRoute";
 import AdminLoginPage from "./Pages/adminLogin/AdminLoginPage";
-import AdminDashBoard from "./Pages/adminDashBoard/AdminDashBoard";
+import BookSearchTable from "./components/BookSearchTable";
 import AdminDashboard from "./Pages/adminDashBoard/AdminDashBoard";
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
             <Route path="/user/dashboard" element={<BookCard />} />
             <Route path="/addbook" element={<AddBook />} />
             <Route path="/editbook/:id" element={<EditBook />} />
+            <Route path="/manage-books" element={<BookSearchTable />} />
           </Route>
         </Routes>
       </Router>
